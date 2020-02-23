@@ -6,6 +6,14 @@ import pathlib
 import string
 from datetime import datetime
 
+def create_output_dir_if_needed(directory):
+    output_dir = pathlib.Path(directory)
+    if not output_dir.is_dir():
+        os.mkdir(str(output_dir))
+        print("Created: {}".format(str(output_dir)))
+    else:
+        print("Already exists: {}".format(str(output_dir)))
+
 class ImageDirectory(object):
     """Data structure for a directory of images.
 
@@ -457,19 +465,19 @@ def plot_colors_over_time(
         title += " Average Color Change Over Time"
     else:
         title = "Average Color Change Over Time"
-    fig, ax = plt.subplots();
+    fig, ax = plt.subplots()
 
-    summary_df.plot(ax=ax, x="TimeDelta", y="BlueMean", yerr="BlueStd", capsize=3, color="blue");
-    summary_df.plot(ax=ax, x="TimeDelta", y="RedMean", yerr="RedStd", capsize=3, color="red");
-    summary_df.plot(ax=ax, x="TimeDelta", y="GreenMean", yerr="GreenStd", capsize=3, color="green");
-    ax.set_title(title);
-    ax.set_ylabel("Intensity (0 - 255)");
-    ax.set_xlabel("Time (s)");
+    summary_df.plot(ax=ax, x="TimeDelta", y="BlueMean", yerr="BlueStd", capsize=3, color="blue")
+    summary_df.plot(ax=ax, x="TimeDelta", y="RedMean", yerr="RedStd", capsize=3, color="red")
+    summary_df.plot(ax=ax, x="TimeDelta", y="GreenMean", yerr="GreenStd", capsize=3, color="green")
+    ax.set_title(title)
+    ax.set_ylabel("Intensity (0 - 255)")
+    ax.set_xlabel("Time (s)")
     ax.set_xlim(
         summary_df.iloc[0]["TimeDelta"] - pad_sides,
         summary_df.iloc[-1]["TimeDelta"] + pad_sides
-    );
-    ax.legend(["Blue Mean", "Red Mean", "Green Mean"]);
+    )
+    ax.legend(["Blue Mean", "Red Mean", "Green Mean"])
     if save:
         leaf = title.lower().replace(" ", "_").replace("%", "") + ".png"
         filename = output_dir / leaf
@@ -486,18 +494,18 @@ def plot_inverted_colors_over_time(
         title += " Average Inverted Color Change Over Time"
     else:
         title = "Average Inverted Color Change Over Time"
-    fig, ax = plt.subplots();
-    summary_df.plot(ax=ax, x="TimeDelta", y="InvertedBlueMean", yerr="InvertedBlueStd", capsize=3, color="blue");
-    summary_df.plot(ax=ax, x="TimeDelta", y="InvertedRedMean", yerr="InvertedRedStd", capsize=3, color="red");
-    summary_df.plot(ax=ax, x="TimeDelta", y="InvertedGreenMean", yerr="InvertedGreenStd", capsize=3, color="green");
-    ax.set_title(title);
-    ax.set_ylabel("Intensity (0 - 255)");
-    ax.set_xlabel("Time (s)");
+    fig, ax = plt.subplots()
+    summary_df.plot(ax=ax, x="TimeDelta", y="InvertedBlueMean", yerr="InvertedBlueStd", capsize=3, color="blue")
+    summary_df.plot(ax=ax, x="TimeDelta", y="InvertedRedMean", yerr="InvertedRedStd", capsize=3, color="red")
+    summary_df.plot(ax=ax, x="TimeDelta", y="InvertedGreenMean", yerr="InvertedGreenStd", capsize=3, color="green")
+    ax.set_title(title)
+    ax.set_ylabel("Intensity (0 - 255)")
+    ax.set_xlabel("Time (s)")
     ax.set_xlim(
         summary_df.iloc[0]["TimeDelta"] - pad_sides,
         summary_df.iloc[-1]["TimeDelta"] + pad_sides
-    );
-    ax.legend(["Inverted Blue Mean", "Inverted Red Mean", "Inverted Green Mean"]);
+    )
+    ax.legend(["Inverted Blue Mean", "Inverted Red Mean", "Inverted Green Mean"])
     if save:
         leaf = title.lower().replace(" ", "_").replace("%", "") + ".png"
         filename = output_dir / leaf
@@ -514,7 +522,7 @@ def plot_grayscale_over_time(
         title += " Average Grayscale Intensity Over Time"
     else:
         title = "Average Grayscale Intensity Over Time"
-    fig, ax = plt.subplots();
+    fig, ax = plt.subplots()
     summary_df.plot(
         ax=ax,
         x="TimeDelta",
@@ -523,14 +531,14 @@ def plot_grayscale_over_time(
         capsize=3,
         color="gray",
         legend=False
-    );
-    ax.set_title(title);
-    ax.set_ylabel("Intensity (0 - 255)");
-    ax.set_xlabel("Time (s)");
+    )
+    ax.set_title(title)
+    ax.set_ylabel("Intensity (0 - 255)")
+    ax.set_xlabel("Time (s)")
     ax.set_xlim(
         summary_df.iloc[0]["TimeDelta"] - pad_sides,
         summary_df.iloc[-1]["TimeDelta"] + pad_sides
-    );
+    )
     if save:
         leaf = title.lower().replace(" ", "_").replace("%", "") + ".png"
         filename = output_dir / leaf
@@ -547,7 +555,7 @@ def plot_inverted_grayscale_over_time(
         title += " Average Inverted Grayscale Intensity Over Time"
     else:
         title = "Average Inverted Grayscale Intensity Over Time"
-    fig, ax = plt.subplots();
+    fig, ax = plt.subplots()
     summary_df.plot(
         ax=ax,
         x="TimeDelta",
@@ -556,14 +564,14 @@ def plot_inverted_grayscale_over_time(
         capsize=3,
         color="gray",
         legend=False
-    );
-    ax.set_title(title);
-    ax.set_ylabel("Intensity (0 - 255)");
-    ax.set_xlabel("Time (s)");
+    )
+    ax.set_title(title)
+    ax.set_ylabel("Intensity (0 - 255)")
+    ax.set_xlabel("Time (s)")
     ax.set_xlim(
         summary_df.iloc[0]["TimeDelta"] - pad_sides,
         summary_df.iloc[-1]["TimeDelta"] + pad_sides
-    );
+    )
     if save:
         leaf = title.lower().replace(" ", "_").replace("%", "") + ".png"
         filename = output_dir / leaf
@@ -574,10 +582,19 @@ def plot_many_inverted_grayscale_intensities_over_time(
     names,
     save=False,
     output_dir=".",
-    pad_sides=15
+    pad_sides=15,
+    height_in_cm=8.3,
+    width_in_cm=8.3,
+    dpi=600
 ):
-    overall_title = "Average Inverted Grayscale Intensity Over Time"
-    fig, ax = plt.subplots();
+    plt.rcParams["font.size"] = 10
+    plt.rcParams.update({"font.size": 10})
+    width_in_in = width_in_cm * 0.3937
+    height_in_in = height_in_cm * 0.3937
+
+    overall_title = "Average Inverted Grayscale\nIntensity Over Time"
+    fig, ax = plt.subplots()
+
     for summary_df, legend_name in zip(summary_dfs, names):
         summary_df.plot(
             ax=ax,
@@ -586,15 +603,37 @@ def plot_many_inverted_grayscale_intensities_over_time(
             yerr="InvertedGrayscaleIntensityStd",
             capsize=3,
             label=legend_name
-        );
-    ax.set_title(overall_title);
-    ax.set_ylabel("Intensity (0 - 255)");
-    ax.set_xlabel("Time (s)");
+        )
+    # ax.set_title(overall_title)
+    ax.set_ylabel("Intensity (0 - 255)")
+    ax.set_xlabel("Time (s)")
     ax.set_xlim(
         summary_df.iloc[0]["TimeDelta"] - pad_sides,
         summary_df.iloc[-1]["TimeDelta"] + pad_sides
-    );
+    )
+
+    plt.legend(
+        # bbox_to_anchor=(1.04, 1),
+        bbox_to_anchor=(0.5, 0.14),
+        ncol=2,
+        frameon=False,
+        loc="upper center",
+        borderaxespad=0,
+        bbox_transform=fig.transFigure
+    )
+
+    plt.tight_layout()
+
     if save:
-        leaf = overall_title.lower().replace(" ", "_").replace("%", "") + ".png"
+        fig.set_size_inches(width_in_in, height_in_in)
+        plt.tight_layout()
+
+        leaf = overall_title.lower().replace(" ", "_").replace("%", "").replace("\n", " ") + ".tiff"
         filename = output_dir / leaf
-        fig.savefig(str(filename))
+        fig.savefig(
+            str(filename),
+            dpi=dpi,
+            format="tiff",
+            pil_kwargs={"compression": "tiff_lzw"},
+            bbox_inches="tight"
+        )
